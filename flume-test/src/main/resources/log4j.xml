@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+	<appender name="flume"
+		class="org.apache.flume.clients.log4jappender.Log4jAppender">
+		<param name="hostname" value="192.168.12.100" />
+		<param name="port" value="44446" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%p] %d (%F:%L) %c - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="async" class="org.apache.log4j.AsyncAppender">
+		<param name="Blocking" value="false" />
+		<param name="BufferSize" value="500" />
+		<appender-ref ref="flume" />
+	</appender>
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%p] %d (%F:%L) %c - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="fileout" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="logs/server_log.txt" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%F:%L) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+ 
+	<root>
+		<priority value="info"></priority>
+		<appender-ref ref="stdout" />
+ 		<appender-ref ref="async" /> 
+	</root>
+</log4j:configuration>
